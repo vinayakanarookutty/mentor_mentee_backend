@@ -1,0 +1,30 @@
+{
+  "name": "menter_mentee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon -r dotenv/config app.ts",
+    "prod": "tsc && nodemon -r dotenv/config bin/app.js",
+    "build": "tsc",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-correlation-id": "^2.0.1",
+    "mongodb": "^5.7.0",
+    "mongoose": "^7.4.3",
+    "morgan": "^1.10.0",
+    "node-env-file": "^0.1.8",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.1"
+  }
+}
