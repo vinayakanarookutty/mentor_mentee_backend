@@ -3,7 +3,7 @@ import { APP_CONSTANTS } from "../shared/constants/app/general";
 import { Operations } from "../shared/enums/routing/general";
 import { errorHandler } from "../middlewere/errorHandler";
 import { IHandler } from "../shared/interfaces/controllers/handlers";
-
+import { CreateUserMenteeHandler } from "../controllers/users/createUserMentee";
 const MAP_KEY_PAIR = [
     [Operations.CREATE, HTTP_METHODS.POST], [Operations.REPLACE, HTTP_METHODS.PUT],
     [Operations.DELETE, HTTP_METHODS.DELETE], [Operations.UPDATE, HTTP_METHODS.PATCH],
@@ -27,7 +27,7 @@ export const registerRoutes = function (app) {
 function getAllRouteHandlers(): Array<IHandler> {
 
     const routeHandlers: Array<IHandler> = [];
-    // routeHandlers.push(new CreateClientHandler());
+    routeHandlers.push(new CreateUserMenteeHandler());
     // routeHandlers.push(new GetClientListHandler());
     // routeHandlers.push(new UpdateClientHandler());
     // routeHandlers.push(new TaskCategoryHandler());

@@ -4,6 +4,9 @@ import { HTTP_RESOURCES } from '../../reqRouters/resourses';
 import { MongoQueryBuilder } from './queryBuilder';
 import { config } from '../../config';
 import { IMongoDALCreateArg } from '../../interfaces/db';
+
+
+
 export class MongoDAL {
     public mongoDBUrl: string;
     constructor() {
@@ -25,6 +28,7 @@ export class MongoDAL {
   
     async createItem(resource: string, arg: IMongoDALCreateArg) {
       try {
+       
         await mongoose.connect(this.mongoDBUrl);
         const collectionName = config.mongoCollectionMap[resource];
         const model = mongoose.model(collectionName);

@@ -2,7 +2,7 @@ export const devConfig = {
     mongoCollectionMap:{
         // 'clients':'clients',
         // 'audits': 'audits',
-        // 'users': 'users',
+        'users': 'users',
         // 'organisation': 'organisation',
         // 'clientMasterFiles':'clientMasterFiles',
         // 'taskCategoryFiles': 'taskCategoryFiles',
