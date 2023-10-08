@@ -10,6 +10,7 @@ import { DB_ERRORS } from "../../../shared/constants/errors/apiErrors";
 //   logDBError,
 // } from "../../commonUtils/logging";
 // import{logDb}
+import { hashPassword,verifyPassword } from "../../../shared/config/authorisation/HashPassword";
 import { Logger } from "../../../shared/utilities/logging/logger";
 const functionContext = "createUserMentee";
 export class CreateUserMenteeHandler implements IHandler {
@@ -29,28 +30,81 @@ export class CreateUserMenteeHandler implements IHandler {
     const logger: Logger = initializeLogger(req, functionContext);
     const mongoDal = new MongoDAL();
     // const uniqueClientId = `${(req.body.clientName.toLowerCase()).replace(/\s+/g, "_")}-${req.body.panNumber}`;
-    try {
-      const params = {
-        data: {
-          ...req.body,
-        },
-        constraints: { unique: [{ emaiId: req.body.emailId }] },
+   
+
+      if(req.body.status=='Login')
+      {
+        try{
+          console.log(req.body)
+          
+        const  result = await mongoDal.getItem({ resource: this.resource, queryObj: {emailId:req.body.userName} });
+       console.log(result)
+        if (result==null)
+        {
+          return res.status(404).json({ message: " This email doenot exists " });
+        }
+      
+        const passwordVerified = await verifyPassword(req.body.password, result.password);
+        console.log(passwordVerified)
+        if (passwordVerified==false)
+        {
+          return res.status(401).json({ message: "Incorrect password" });
+        }
+        else{
+          res.status(200).send({name:result.name,emailId:result.emailId});
+        }
+  
+        endLogger(logger);
+      }catch (err) {
+          logDBError(logger, err);
+          if (err.name && err.name == DB_ERRORS.uniqueCheckFailed) {
+            next({
+              errorCode: HTTP_RESPOSE_CODES.DUPLICATE,
+              message: err.message,
+              details: "Please check email",
+            });
+          } else {
+            next(err);
+          }
+          endLogger(logger);
+          return;
+    
+        }
+     
+
       }
-      console.log(params)
-      await mongoDal.createItem(this.resource, params);
-    } catch (err) {
-      logDBError(logger, err);
-      if (err.name && err.name == DB_ERRORS.uniqueCheckFailed) {
-        next({
-          errorCode: HTTP_RESPOSE_CODES.DUPLICATE,
-          message: err.message,
-          details: "Please check the pan number",
-        });
-      } else {
-        next(err);
-      }
-      return;
+      else
+      {
+        try {
+          const hashedPassword = await hashPassword(req.body.password);
+          const params = {
+            data: {
+             name:req.body.name,
+             phoneNumber:req.body.phoneNumber,
+             emailId:req.body.emailId,
+             password:hashedPassword
+            },
+            constraints: { unique: [{ emaiId: req.body.emailId }] },
+          }
+          console.log(params)
+    
+          await mongoDal.createItem(this.resource, params);
+        } catch (err) {
+          logDBError(logger, err);
+          if (err.name && err.name == DB_ERRORS.uniqueCheckFailed) {
+            next({
+              errorCode: HTTP_RESPOSE_CODES.DUPLICATE,
+              message: err.message,
+              details: "Please check the Email",
+            });
+          } else {
+            next(err);
+          }
+          return;
+        }
+        res.status(200).send(req.body);
     }
-    res.status(200).send(req.body);
-}
+        
+      }
+    
 }

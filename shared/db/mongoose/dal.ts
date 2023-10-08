@@ -118,6 +118,7 @@ export class MongoDAL {
         await mongoose.connect(this.mongoDBUrl);
         const collectionName = config.mongoCollectionMap[resource];
         const model = mongoose.model(collectionName);
+        console.log(queryObj,resource)
         const result = await model.findOne(queryObj);
         return result;
       } catch (err) {

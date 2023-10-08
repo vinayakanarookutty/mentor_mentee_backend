@@ -9,31 +9,16 @@ const userSchema= new Schema<IUser>(
         name:{
             type:String
         },
-        dateofbirth:{
-            type:String
-        },
-        age:{
-            type:String
-        },
         phoneNumber:{
-            type:String
-        },
-        permanentAddress:{
-            type:String
-        },
-        guardian:{
-            type:String
-        },
-        guardianPhNo:{
             type:String
         },
         emailId:{
             type:String
         },
-        intrest:{
+       password:{
             type:String
         },
     },
-    { strict: false, timestamps: true }
+    { strict: true, timestamps: true }
 )
 mongoose.model(HTTP_RESOURCES.users,userSchema,HTTP_RESOURCES.users)
