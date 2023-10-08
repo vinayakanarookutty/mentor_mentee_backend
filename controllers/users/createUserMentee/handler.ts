@@ -41,14 +41,14 @@ export class CreateUserMenteeHandler implements IHandler {
        console.log(result)
         if (result==null)
         {
-          return res.status(404).json({ message: " This email doenot exists " });
+         res.status(202).send({ message: " This email doenot exists " });
         }
       
         const passwordVerified = await verifyPassword(req.body.password, result.password);
         console.log(passwordVerified)
         if (passwordVerified==false)
         {
-          return res.status(401).json({ message: "Incorrect password" });
+         res.status(201).send({ message: "Incorrect password" });
         }
         else{
           res.status(200).send({name:result.name,emailId:result.emailId});
