@@ -3,6 +3,7 @@ export const devConfig = {
         // 'clients':'clients',
         // 'audits': 'audits',
         'users': 'users',
+        'mentors':"mentors"
         // 'organisation': 'organisation',
         // 'clientMasterFiles':'clientMasterFiles',
         // 'taskCategoryFiles': 'taskCategoryFiles',

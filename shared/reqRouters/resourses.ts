@@ -1,5 +1,6 @@
 export const HTTP_RESOURCES = {
-    users:'users'
+    users:'users',
+    mentors:'mentors'
     // qrCodes: 'qrCodes',
     // inventory: 'inventory',
     // userPoints: 'userPoints',
