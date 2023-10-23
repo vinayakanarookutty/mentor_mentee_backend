@@ -24,21 +24,12 @@ export class GetUserMenteeHandler implements IHandler {
   async handler(req: any, res: any, next) {
     const logger: Logger = initializeLogger(req, functionContext);
     const mongoDal = new MongoDAL();
+    let result
     // const uniqueClientId = `${(req.body.clientName.toLowerCase()).replace(/\s+/g, "_")}-${req.body.panNumber}`;
     try {
-      const hashedPassword = await hashPassword(req.body.password);
-      const params = {
-        data: {
-         name:req.body.name,
-         phoneNumber:req.body.phoneNumber,
-         emailId:req.body.emailId,
-         password:hashedPassword
-        },
-        constraints: { unique: [{ emaiId: req.body.emailId }] },
-      }
-      console.log(params)
-
-      await mongoDal.createItem(this.resource, params);
+      result = await mongoDal.getItem({ resource: this.resource, queryObj: query });
+                endLogger(logger);
+                res.status(200).send(result);
     } catch (err) {
       logDBError(logger, err);
       if (err.name && err.name == DB_ERRORS.uniqueCheckFailed) {
