@@ -25,9 +25,10 @@ export class GetUserMenteeHandler implements IHandler {
     const logger: Logger = initializeLogger(req, functionContext);
     const mongoDal = new MongoDAL();
     let result
+    const query = req.query;
     // const uniqueClientId = `${(req.body.clientName.toLowerCase()).replace(/\s+/g, "_")}-${req.body.panNumber}`;
     try {
-      result = await mongoDal.getItem({ resource: this.resource, queryObj: query });
+      result = await mongoDal.getItemList({ resource: this.resource, queryObj: query });
                 endLogger(logger);
                 res.status(200).send(result);
     } catch (err) {
