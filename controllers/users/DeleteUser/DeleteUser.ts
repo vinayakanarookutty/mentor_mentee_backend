@@ -8,14 +8,14 @@ import { DB_ERRORS } from "../../../shared/constants/errors/apiErrors";
 import { hashPassword } from "../../../shared/config/authorisation/HashPassword";
 import { Logger } from "../../../shared/utilities/logging/logger";
 const functionContext = "getUserMentee";
-export class GetUserMenteeHandler implements IHandler {
+export class DeleteUserHandler implements IHandler {
   operation: Operations;
   isIdempotent: boolean;
   resource: string;
   validations: any[];
   constructor() {
-    this.operation = Operations.READ;
-    this.isIdempotent = false;
+    this.operation = Operations.DELETE;
+    this.isIdempotent = true;
     this.resource = HTTP_RESOURCES.users;
     this.handler = this.handler.bind(this);
    
@@ -24,27 +24,43 @@ export class GetUserMenteeHandler implements IHandler {
   async handler(req: any, res: any, next) {
     const logger: Logger = initializeLogger(req, functionContext);
     const mongoDal = new MongoDAL();
-    let result
-    const query = req.query;
     // const uniqueClientId = `${(req.body.clientName.toLowerCase()).replace(/\s+/g, "_")}-${req.body.panNumber}`;
+    const email = req.query.emailId.toString()
+    // const filter = { emailId: email };
+
+    // if (!uniqueClientId) {
+    //   return res.status(400).json({ message: "Client Id not provided" });
+    // }
+    console.log(email)
+   
+
     try {
-      result = await mongoDal.getItemList({ resource: this.resource, queryObj: query });
-               
-                res.status(200).send(result);
-                endLogger(logger);
+       
+        
+      
+      delete req.body["uniqueClientId"];
+      console.log(email)
+      const result = await mongoDal.deleteItem({
+        resource: this.resource,
+        queryObj:email
+      });
+    
+      endLogger(logger);
+      
+     
     } catch (err) {
       logDBError(logger, err);
       if (err.name && err.name == DB_ERRORS.uniqueCheckFailed) {
         next({
-          errorCode: HTTP_RESPOSE_CODES.DUPLICATE,
+          errorCode: 400,
           message: err.message,
-          details: "Please check the pan number",
+          details: "Please check the request body",
         });
       } else {
         next(err);
       }
       return;
     }
-    // res.status(200).send(req.body);
+    res.status(200).send("Success");
 }
 }

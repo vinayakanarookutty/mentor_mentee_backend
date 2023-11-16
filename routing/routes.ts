@@ -4,6 +4,9 @@ import { Operations } from "../shared/enums/routing/general";
 import { errorHandler } from "../middlewere/errorHandler";
 import { IHandler } from "../shared/interfaces/controllers/handlers";
 import { CreateUserMenteeHandler } from "../controllers/users";
+import { GetUserMenteeHandler } from "../controllers/users/getUserMentee/handler";
+import { UpdateUserHandler } from "../controllers/users/UpdateUser/handler";
+import { DeleteUserHandler } from "../controllers/users/DeleteUser/DeleteUser";
 const MAP_KEY_PAIR = [
     [Operations.CREATE, HTTP_METHODS.POST], [Operations.REPLACE, HTTP_METHODS.PUT],
     [Operations.DELETE, HTTP_METHODS.DELETE], [Operations.UPDATE, HTTP_METHODS.PATCH],
@@ -28,7 +31,9 @@ function getAllRouteHandlers(): Array<IHandler> {
 
     const routeHandlers: Array<IHandler> = [];
     routeHandlers.push(new CreateUserMenteeHandler());
-    
+    routeHandlers.push(new GetUserMenteeHandler())
+    routeHandlers.push(new UpdateUserHandler())
+    routeHandlers.push(new DeleteUserHandler())
    
     return routeHandlers;
 }
